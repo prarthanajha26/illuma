@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "609450172227",
+    "project_id": "illumaai",
+    "storage_bucket": "illumaai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609450172227:android:808435263e4ff7c141d9f6",
+        "android_client_info": {
+          "package_name": "com.equipmangmnt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFn7Fwojg0b_1_GuzC88XreqbMgYm_Lt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

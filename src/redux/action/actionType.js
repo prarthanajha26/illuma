@@ -1,0 +1,8 @@
+// src/actions/actionTypes.js
+export const CREATE_USER = 'CREATE_USER';
+export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
+export const CREATE_USER_FAILURE = 'CREATE_USER_FAILURE';
+// src/actions/analysisActionTypes.js
+export const FETCH_ANALYSIS_REQUEST = 'FETCH_ANALYSIS_REQUEST';
+export const FETCH_ANALYSIS_SUCCESS = 'FETCH_ANALYSIS_SUCCESS';
+export const FETCH_ANALYSIS_FAILURE = 'FETCH_ANALYSIS_FAILURE';
