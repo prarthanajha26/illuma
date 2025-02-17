@@ -6,7 +6,6 @@ import {
 } from '../action/analysisAction';
 import {FETCH_ANALYSIS_REQUEST} from '../action/actionType';
 
-// Define the API function
 const fetchAnalysisDataFromApi = async (email, imageData) => {
   const response = await fetch(
     'https://illuma-ai-gdcyh9andwarg9b8.canadacentral-01.azurewebsites.net/analyze_image',
@@ -17,7 +16,7 @@ const fetchAnalysisDataFromApi = async (email, imageData) => {
       },
       body: JSON.stringify({
         email: email,
-        image_data: imageData, // Base64 image data
+        image_data: imageData,
       }),
     },
   );
@@ -29,24 +28,18 @@ const fetchAnalysisDataFromApi = async (email, imageData) => {
   return response.json();
 };
 
-// Worker Saga: Handles the fetch analysis request
 function* fetchAnalysis(action) {
   try {
-    const {email, imageData} = action.payload; // Destructure email and imageData from action payload
+    const {email, imageData} = action.payload;
 
-    // Make the API call to fetch the analysis data
     const data = yield call(fetchAnalysisDataFromApi, email, imageData);
-    console.log(data, 'data');
 
-    // Dispatch success action with the data
     yield put(fetchAnalysisSuccess(data));
   } catch (error) {
-    // Dispatch failure action with the error message
     yield put(fetchAnalysisFailure(error.message));
   }
 }
 
-// Watcher Saga: Watches for the FETCH_ANALYSIS_REQUEST action
 function* analysisSaga() {
   yield takeEvery(FETCH_ANALYSIS_REQUEST, fetchAnalysis);
 }

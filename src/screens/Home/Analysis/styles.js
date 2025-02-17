@@ -1,0 +1,192 @@
+import {StyleSheet} from 'react-native';
+import {normalize} from '../../../utils/dimension';
+import {fonts} from '../../../assets';
+
+const styles = StyleSheet.create({
+  safeAreaView: {
+    backgroundColor: '#131313',
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#1C1C1C',
+    paddingHorizontal: normalize(20),
+    paddingVertical: normalize(27),
+  },
+  container: {
+    paddingBottom: normalize(35),
+  },
+  backButton: {
+    flexDirection: 'row',
+  },
+  backButtonImage: {
+    height: normalize(20),
+    width: normalize(20),
+  },
+  backButtonText: {
+    color: '#fff',
+    fontFamily: fonts.InstrumentSem,
+  },
+  analysisHeader: {
+    marginTop: normalize(30),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  analysisTitle: {
+    color: '#fff',
+    fontSize: normalize(23),
+    fontWeight: '700',
+    fontFamily: fonts.InstrumentSem,
+  },
+  bookMarkIcon: {
+    height: normalize(24),
+    width: normalize(24),
+  },
+  dateContainer: {
+    borderWidth: 1,
+    borderColor: '#FFBF00',
+    width: normalize(157),
+    height: normalize(31),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: normalize(20),
+    marginTop: normalize(20),
+  },
+  ZoneContainer: {
+    borderWidth: 1,
+    borderColor: '#FFBF00',
+    width: normalize(55),
+    height: normalize(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: normalize(20),
+    marginVertical: normalize(5),
+  },
+  ZoneText: {
+    color: '#FFBF00',
+    fontSize: normalize(10),
+    fontWeight: '400',
+    fontFamily: fonts.HammerRegular,
+  },
+  intensityContainer: {
+    borderWidth: 1,
+    borderColor: '#FFBF00',
+    width: normalize(135),
+    height: normalize(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: normalize(20),
+    marginVertical: normalize(5),
+  },
+  intensityText: {
+    color: '#FFBF00',
+    fontSize: normalize(10),
+    fontWeight: '400',
+    fontFamily: fonts.HammerRegular,
+  },
+  dateText: {
+    color: '#FFBF00',
+    fontSize: normalize(12),
+    fontWeight: '400',
+    fontFamily: fonts.HammerRegular,
+  },
+  imageContainer: {
+    height: undefined,
+    width: '100%',
+    aspectRatio: 0.68,
+    marginTop: normalize(20),
+    borderRadius: normalize(15),
+    overflow: 'hidden',
+    alignItems: 'center',
+    marginBottom: normalize(25),
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectedImage: {
+    height: undefined,
+    width: '100%',
+    aspectRatio: 0.68,
+    resizeMode: 'cover',
+  },
+  fullImage: {
+    height: '100%',
+    width: '100%',
+    // aspectRatio: 0.68,
+    resizeMode: 'contain',
+  },
+  viewFalseImageButton: {
+    position: 'absolute',
+    width: normalize(220),
+    paddingLeft: normalize(30),
+    backgroundColor: '#FFBF00',
+    borderRadius: normalize(34),
+    bottom: normalize(40),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: normalize(10),
+  },
+  viewFalseImageText: {
+    fontSize: normalize(13),
+    fontWeight: '400',
+    width: '68%',
+    fontFamily: fonts.InstrumentReg,
+  },
+  arrowContainer: {
+    backgroundColor: '#2E3131',
+    height: normalize(43),
+    width: normalize(44),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: normalize(100),
+    marginRight: normalize(10),
+    marginVertical: normalize(8),
+  },
+  arrowIcon: {
+    height: normalize(24),
+    width: normalize(24),
+  },
+  card: {
+    paddingHorizontal: normalize(20),
+    paddingVertical: normalize(15),
+    borderWidth: 1,
+    borderColor: '#484848',
+    borderRadius: normalize(16),
+    marginBottom: normalize(20),
+  },
+  cardTitle: {
+    fontSize: normalize(13),
+    fontWeight: '600',
+    color: '#5E5E5E',
+    lineHeight: normalize(21),
+    // marginTop: normalize(8),
+    fontFamily: fonts.InterSemiBold,
+  },
+  cardContent: {
+    fontSize: normalize(13),
+    fontWeight: '400',
+    color: '#fff',
+    marginTop: normalize(4),
+    marginBottom: normalize(5),
+    alignSelf: 'center',
+  },
+  loadingOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  loadingText: {
+    fontSize: normalize(18),
+    color: '#fff',
+    fontFamily: fonts.InterSemiBold,
+  },
+  wrapper: {
+    flex: 1,
+  },
+});
+
+export default styles;

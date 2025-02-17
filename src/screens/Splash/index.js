@@ -1,4 +1,4 @@
-import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Image, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {icons} from '../../assets';
 import {screenNames} from '../../navigator/screenName';
@@ -9,24 +9,35 @@ const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(async () => {
       checkLoginStatus();
-    }, 2000);
+    }, 800);
   }, []);
 
   const checkLoginStatus = async () => {
     try {
+      // await AsyncStorage.clear();
       const token = await AsyncStorage.getItem('token');
       const loggedIn = await AsyncStorage.getItem('loggedIn');
 
       if (token && loggedIn === 'true') {
-        navigation.navigate(screenNames.Home);
+        navigation.reset({
+          index: 0,
+          routes: [{name: screenNames.Home}],
+        });
       } else {
-        navigation.navigate(screenNames.Register);
+        navigation.reset({
+          index: 0,
+          routes: [{name: screenNames.Register}],
+        });
       }
     } catch (error) {
       console.error('Error checking AsyncStorage:', error);
-      navigation.navigate(screenNames.Register);
+      navigation.reset({
+        index: 0,
+        routes: [{name: screenNames.Register}],
+      });
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>

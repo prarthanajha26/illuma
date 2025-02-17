@@ -2,12 +2,14 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '../screens/Home';
 import {screenNames} from './screenName';
 import Login from '../screens/Login';
 import Splash from '../screens/Splash';
 import Register from '../screens/Register';
 import BottomNavigation from './bottomNavigation';
+import Analysis from '../screens/Home/Analysis';
+import ManagePlanScreen from '../screens/Subscription/ManagePlan';
+import RecoverAccount from '../screens/forgotPassword';
 const Stack = createNativeStackNavigator();
 
 const rootnavigation = () => {
@@ -30,8 +32,23 @@ const rootnavigation = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name={screenNames.ForgotPassword}
+          component={RecoverAccount}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name={screenNames.Register}
           component={Register}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={screenNames.Analysis}
+          component={Analysis}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={screenNames.ManagePlan}
+          component={ManagePlanScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

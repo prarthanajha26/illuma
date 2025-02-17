@@ -7,12 +7,46 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
+  Linking,
 } from 'react-native';
-import {icons} from '../../../assets';
+import {fonts, icons, image} from '../../../assets';
 import {normalize} from '../../../utils/dimension';
+import ProgressBar from '../../../components/ProgressBar';
+import {fetchPaymentUrl} from '../../../redux/saga/paymentSaga';
+import {screenNames} from '../../../navigator/screenName';
 
 const ManagePlanScreen = ({navigation, route}) => {
-  const {subscription} = route?.params;
+  const {subscription, plan, subscriptionData, subscribeTo, email} =
+    route?.params || {};
+
+  let formattedDate = '';
+  if (subscriptionData !== undefined && subscriptionData?.end_date) {
+    const [date, time] = subscriptionData?.end_date?.split('T');
+    const dateObject = new Date(date);
+
+    formattedDate = dateObject
+      .toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'numeric',
+        year: 'numeric',
+      })
+      .replace(' ', '-')
+      .toLowerCase();
+  }
+
+  const handlePayment = async () => {
+    if (!subscription) {
+      navigation.navigate(screenNames.Subscription);
+    } else {
+      const data = await fetchPaymentUrl(email, subscribeTo?.id);
+      Linking.openURL(data.checkout_url);
+    }
+  };
+  const handleRenewPlan = async () => {
+    const data = await fetchPaymentUrl(email, plan.id);
+    Linking.openURL(data.checkout_url);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -25,20 +59,37 @@ const ManagePlanScreen = ({navigation, route}) => {
         </TouchableOpacity>
 
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          <Text style={styles.screenTitle}>Manage Plan</Text>
+          <Text style={styles.screenTitle}>
+            {subscription ? 'Subscribe' : 'Manage Plan'}
+          </Text>
 
           {/* Premium Package Card */}
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>✨ Premium Package</Text>
-            <View style={styles.cardFeatureRow}>
-              <View style={styles.bulletPoint} />
-              <Text style={styles.cardFeatureText}>Unlimited tokens/day</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: normalize(10),
+                marginLeft: normalize(5),
+              }}>
+              <Image
+                source={
+                  plan.id === 'basic'
+                    ? image.basicCrown
+                    : plan.id === 'free'
+                    ? image.freeRocket
+                    : image.premiumStar
+                }
+                style={{height: normalize(20), width: normalize(20)}}
+              />
+              <Text style={styles.cardTitle}>{plan.name}</Text>
             </View>
             <View style={styles.cardFeatureRow}>
               <View style={styles.bulletPoint} />
-              <Text style={styles.cardFeatureText}>
-                Access to all app features
-              </Text>
+              <Text style={styles.cardFeatureText}>{plan.desc1}</Text>
+            </View>
+            <View style={styles.cardFeatureRow}>
+              <View style={styles.bulletPoint} />
+              <Text style={styles.cardFeatureText}>{plan.desc2}</Text>
             </View>
           </View>
 
@@ -55,18 +106,25 @@ const ManagePlanScreen = ({navigation, route}) => {
                 Subscribe to
               </Text>
               <View style={styles.cardHeader}>
-                <Text style={styles.cardHeaderIcon}>✨</Text>
-                <Text style={styles.cardHeaderTitle}>Premium Package</Text>
+                <Image
+                  source={
+                    subscribeTo?.id === 'basic'
+                      ? image.basicCrown
+                      : subscribeTo?.id === 'free'
+                      ? image.freeRocket
+                      : image.premiumStar
+                  }
+                  style={{height: normalize(20), width: normalize(20)}}
+                />
+                <Text style={styles.cardHeaderTitle}>{subscribeTo?.name}</Text>
               </View>
               <View style={styles.cardFeatureRow}>
                 <View style={styles.bulletPoint} />
-                <Text style={styles.cardFeatureText}>unlimited tokens/day</Text>
+                <Text style={styles.cardFeatureText}>{subscribeTo?.desc1}</Text>
               </View>
               <View style={styles.cardFeatureRow}>
                 <View style={styles.bulletPoint} />
-                <Text style={styles.cardFeatureText}>
-                  Access to all app features
-                </Text>
+                <Text style={styles.cardFeatureText}>{subscribeTo?.desc2}</Text>
               </View>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text
@@ -75,43 +133,93 @@ const ManagePlanScreen = ({navigation, route}) => {
                     fontWeight: '400',
                     color: '#E9B701',
                     marginTop: normalize(20),
+                    fontFamily: fonts.InterReg,
                   }}>
-                  $49
+                  ${subscribeTo?.price}
                 </Text>
-                <Text
-                  style={{
-                    fontSize: normalize(15),
-                    fontWeight: '500',
-                    alignSelf: 'flex-end',
-                    color: '#E9B701',
-                    bottom: normalize(4),
-                  }}>
-                  /year
-                </Text>
+                {subscribeTo?.id === 'premium' && (
+                  <Text
+                    style={{
+                      fontSize: normalize(15),
+                      fontWeight: '500',
+                      alignSelf: 'flex-end',
+                      color: '#E9B701',
+                      bottom: normalize(4),
+                      fontFamily: fonts.InterReg,
+                    }}>
+                    /year
+                  </Text>
+                )}
               </View>
             </View>
           ) : (
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>Today's Token Usage</Text>
-              <Text style={styles.usageText}>Unlimited</Text>
-              <View style={styles.progressBar}>
-                <View style={styles.progress} />
-              </View>
+              <Text style={styles.cardTitle}>Token Usage</Text>
+              <Text style={styles.usageText}>
+                {subscriptionData.id === 'premium' ? (
+                  'Unlimited'
+                ) : subscriptionData.id === 'basic' ? (
+                  <>
+                    <Text style={styles.largeText}>
+                      {subscriptionData?.tokens}
+                      {'/'}
+                    </Text>
+                    <Text style={styles.smallText}>
+                      {plan.token_limit.limit}
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.largeText}>
+                      {subscriptionData.tokens}
+                      {'/'}
+                    </Text>
+                    <Text style={styles.smallText}>
+                      {plan.token_limit.limit}
+                    </Text>
+                  </>
+                )}
+              </Text>
+
+              <ProgressBar
+                limit={plan.token_limit.limit}
+                subscriptionData={subscriptionData}
+              />
             </View>
           )}
 
           {/* Expiration Date */}
-          <View style={styles.expiryContainer}>
-            <Text style={styles.expiryText}>Expiring: 15-Dec-2025</Text>
-          </View>
+          {!subscription && (
+            <View style={styles.expiryContainer}>
+              <Text style={styles.expiryText}>Expiring: {formattedDate}</Text>
+            </View>
+          )}
 
           {/* Buttons */}
-          <TouchableOpacity style={styles.primaryButton}>
-            <Text style={styles.primaryButtonText}>Change Plan →</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryButton}>
-            <Text style={styles.secondaryButtonText}>Renew Plan →</Text>
-          </TouchableOpacity>
+          {subscribeTo?.id !== 'free' && (
+            <TouchableOpacity
+              style={styles.primaryButton}
+              onPress={handlePayment}>
+              {!subscription ? (
+                <Text style={styles.primaryButtonText}>Change Plan →</Text>
+              ) : (
+                <Text style={styles.primaryButtonText}>
+                  Proceed to pay{' '}
+                  <Text style={{fontWeight: 'bold'}}>
+                    ${subscribeTo?.price}
+                  </Text>{' '}
+                  →
+                </Text>
+              )}
+            </TouchableOpacity>
+          )}
+          {!subscription && plan.id !== 'free' && (
+            <TouchableOpacity
+              style={styles.secondaryButton}
+              onPress={handleRenewPlan}>
+              <Text style={styles.secondaryButtonText}>Renew Plan →</Text>
+            </TouchableOpacity>
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -131,6 +239,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     flexDirection: 'row',
+    marginVertical: normalize(20),
   },
   backButtonImage: {
     height: normalize(20),
@@ -138,15 +247,18 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: '#fff',
+    fontFamily: fonts.InstrumentSem,
+    fontSize: normalize(16),
   },
   contentContainer: {
     paddingBottom: 16,
   },
   screenTitle: {
-    fontSize: 28,
+    fontSize: normalize(32),
     color: '#fff',
     fontWeight: 'bold',
-    marginVertical: 30,
+    marginVertical: normalize(30),
+    fontFamily: fonts.InterSemiBold,
   },
   card: {
     backgroundColor: '#1E1E1E',
@@ -159,9 +271,10 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: normalize(18),
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: normalize(8),
+    fontFamily: fonts.InstrumentSem,
   },
   cardFeatureRow: {
     flexDirection: 'row',
@@ -177,13 +290,14 @@ const styles = StyleSheet.create({
   },
   cardFeatureText: {
     color: '#aaa',
-    fontSize: 14,
-    marginBottom: 4,
+    fontSize: normalize(12),
+    fontFamily: fonts.InstrumentSem,
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
+    gap: normalize(10),
   },
   cardHeaderIcon: {
     fontSize: 18,
@@ -197,14 +311,15 @@ const styles = StyleSheet.create({
   },
   usageText: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: normalize(30),
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: normalize(8),
+    fontFamily: fonts.InstrumentSem,
   },
   progressBar: {
-    height: 8,
+    height: normalize(8),
     backgroundColor: '#333',
-    borderRadius: 4,
+    borderRadius: normalize(4),
     overflow: 'hidden',
   },
   progress: {
@@ -214,41 +329,53 @@ const styles = StyleSheet.create({
   },
   expiryContainer: {
     alignItems: 'flex-start',
-    marginBottom: 30,
+    marginBottom: normalize(30),
   },
   expiryText: {
     color: '#FFD700',
-    fontSize: 14,
+    fontSize: normalize(12),
     fontWeight: 'bold',
     borderColor: '#FFD700',
-    borderWidth: 1,
-    borderRadius: 16,
-    paddingVertical: 4,
-    paddingHorizontal: 16,
+    borderWidth: normalize(1),
+    borderRadius: normalize(14),
+    paddingVertical: normalize(5),
+    paddingHorizontal: normalize(16),
+    fontFamily: fonts.HammerRegular,
   },
   primaryButton: {
     backgroundColor: '#FFBF00',
-    borderRadius: 8,
-    paddingVertical: 16,
+    borderRadius: normalize(8),
+    paddingVertical: normalize(16),
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: normalize(8),
   },
   primaryButtonText: {
     color: '#121212',
-    fontSize: 16,
+    fontSize: normalize(16),
     fontWeight: 'bold',
+    fontFamily: fonts.InterSemiBold,
   },
   secondaryButton: {
     backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingVertical: 16,
+    borderRadius: normalize(8),
+    paddingVertical: normalize(16),
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: normalize(8),
   },
   secondaryButtonText: {
     color: '#121212',
-    fontSize: 16,
+    fontSize: normalize(16),
     fontWeight: 'bold',
+  },
+  largeText: {
+    fontSize: normalize(30),
+    fontFamily: fonts.InstrumentSem,
+    color: '#afafaf',
+  },
+  smallText: {
+    fontSize: normalize(13),
+    fontFamily: fonts.InstrumentSem,
+    color: '#afafaf',
   },
 });
 

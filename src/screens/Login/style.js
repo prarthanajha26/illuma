@@ -1,11 +1,12 @@
 import {StyleSheet} from 'react-native';
 import {normalize} from '../../utils/dimension';
+import {fonts} from '../../assets';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1c1c1c',
-    paddingHorizontal: normalize(24),
+    padding: normalize(20),
   },
   centered: {
     alignItems: 'center',
@@ -36,32 +37,35 @@ const styles = StyleSheet.create({
   getStartedText: {
     color: '#fff',
     fontSize: normalize(17),
-    fontWeight: normalize(600),
+    fontWeight: '600',
   },
   signupTitle: {
     color: '#fff',
     fontSize: normalize(23),
-    fontWeight: normalize(600),
+    fontWeight: '600',
     textAlign: 'center',
     marginTop: normalize(20),
   },
   signupDescription: {
     color: '#fff',
     fontSize: normalize(13),
-    fontWeight: normalize(600),
+    fontWeight: '600',
     marginTop: normalize(20),
   },
-  googleButtonContainer: {
-    marginTop: normalize(40),
-    alignItems: 'center',
-  },
+  // googleButtonContainer: {
+  //   marginTop: normalize(40),
+  //   alignItems: 'center',
+  // },
   googleButton: {
+    flexDirection: 'row',
     height: normalize(52),
-    width: normalize(74),
+    width: '100%',
     backgroundColor: '#31302F',
-    borderRadius: normalize(17),
+    borderRadius: normalize(10),
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: normalize(40),
+    gap: normalize(20),
   },
   googleIcon: {
     width: normalize(28),
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
   },
   orText: {
     color: '#5E5E5E',
-    fontWeight: normalize(600),
+    fontWeight: '600',
     fontSize: normalize(13),
     paddingHorizontal: normalize(10),
   },
@@ -130,6 +134,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signupButtonText: {
+    fontFamily: fonts.InterSemiBold,
     color: 'black',
   },
   accountQuestionContainer: {
@@ -139,6 +144,7 @@ const styles = StyleSheet.create({
   },
   accountQuestionText: {
     color: '#fff',
+    marginBottom: normalize(20),
   },
   signupLink: {
     color: '#FFBF00',
@@ -150,6 +156,9 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(20),
     marginTop: 5,
   },
+  // scrollViewContent: {
+  //   // flexGrow: 1,
+  // },
 });
 
 export default styles;

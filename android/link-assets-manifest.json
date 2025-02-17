@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/HammersmithOne-Regular.ttf",
+      "sha1": "fb977bc7b84aff62bbbc8c7a2f053da4ad3bb21e"
+    },
+    {
+      "path": "src/assets/fonts/InstrumentSans-Regular.ttf",
+      "sha1": "85a0b0c01deba8e116ef26bb181f121564b2f48b"
+    },
+    {
+      "path": "src/assets/fonts/InstrumentSans-SemiBold.ttf",
+      "sha1": "dc0e994aa5409ffe7b946a900f4b61fffb99a32e"
+    },
+    {
+      "path": "src/assets/fonts/Inter_28pt-Bold.ttf",
+      "sha1": "f3a55daa485aea77a3225cdb628e025291b28f0b"
+    },
+    {
+      "path": "src/assets/fonts/Inter_28pt-Regular.ttf",
+      "sha1": "6177ac91c6fb7df9b09beda7802ea15699a88703"
+    },
+    {
+      "path": "src/assets/fonts/Inter_28pt-SemiBold.ttf",
+      "sha1": "49c4ab71faa7118520a21452906e04f1340c864c"
+    }
+  ]
+}

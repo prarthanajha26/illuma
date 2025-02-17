@@ -9,6 +9,7 @@ const ButtonArrow = ({
   backgroundColor = '#FFBF00',
   onPress,
   containerStyle,
+  iconColor,
 }) => {
   return (
     <TouchableOpacity
@@ -16,7 +17,7 @@ const ButtonArrow = ({
       onPress={onPress}
       style={[
         styles.container,
-        {containerStyle},
+        containerStyle,
         {backgroundColor: backgroundColor},
       ]}>
       <View>
@@ -24,7 +25,10 @@ const ButtonArrow = ({
         <Text style={styles.subTitle}>{buttonSubTitle}</Text>
       </View>
       <View style={styles.arrowContainer}>
-        <Image source={icons.arrow} style={styles.arrowIcon} />
+        <Image
+          source={icons.arrow}
+          style={[styles.arrowIcon, {tintColor: iconColor}]}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
     width: normalize(380),
     backgroundColor: '#FFBF00',
     borderRadius: normalize(27),
-    marginTop: normalize(15),
+    marginTop: normalize(13),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -47,6 +51,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: normalize(19),
     fontWeight: '600',
+    color: 'black',
   },
   subTitle: {
     fontSize: normalize(12),
@@ -55,8 +60,8 @@ const styles = StyleSheet.create({
   },
   arrowContainer: {
     backgroundColor: '#2E3131',
-    height: normalize(43),
-    width: normalize(44),
+    height: normalize(57),
+    width: normalize(57),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: normalize(100),

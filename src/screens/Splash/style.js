@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: normalize(17),
-    fontWeight: normalize(400),
+    fontWeight: '400',
     color: '#fff',
   },
 });

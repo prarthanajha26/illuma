@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {normalize} from '../../utils/dimension';
+import {fonts} from '../../assets';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,6 +11,7 @@ const styles = StyleSheet.create({
   centered: {
     alignItems: 'center',
   },
+
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -36,32 +38,31 @@ const styles = StyleSheet.create({
   getStartedText: {
     color: '#fff',
     fontSize: normalize(17),
-    fontWeight: normalize(600),
+    fontWeight: '600',
   },
   signupTitle: {
     color: '#fff',
     fontSize: normalize(23),
-    fontWeight: normalize(600),
+    fontWeight: '600',
     textAlign: 'center',
     marginTop: normalize(20),
   },
   signupDescription: {
     color: '#fff',
     fontSize: normalize(13),
-    fontWeight: normalize(600),
+    fontWeight: '600',
     marginTop: normalize(20),
   },
-  googleButtonContainer: {
-    marginTop: normalize(40),
-    alignItems: 'center',
-  },
   googleButton: {
+    flexDirection: 'row',
     height: normalize(52),
-    width: normalize(74),
+    width: '100%',
     backgroundColor: '#31302F',
-    borderRadius: normalize(17),
+    borderRadius: normalize(10),
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: normalize(40),
+    gap: normalize(20),
   },
   googleIcon: {
     width: normalize(28),
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
   },
   orText: {
     color: '#5E5E5E',
-    fontWeight: normalize(600),
+    fontWeight: '600',
     fontSize: normalize(13),
     paddingHorizontal: normalize(10),
   },
@@ -109,16 +110,17 @@ const styles = StyleSheet.create({
   passwordInputContainer: {
     marginTop: normalize(20),
     position: 'relative',
+    justifyContent: 'center',
   },
   eyeIconContainer: {
     position: 'absolute',
     right: normalize(20),
-    top: normalize(18),
   },
   eyeIcon: {
     width: normalize(25),
     height: undefined,
     aspectRatio: 1,
+    color: 'red',
   },
   signupButton: {
     borderRadius: normalize(13),
@@ -128,7 +130,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signupButtonText: {
-    color: 'black',
+    fontFamily: fonts.InstrumentSem,
+    color: '#000',
   },
   accountQuestionContainer: {
     flexDirection: 'row',
@@ -137,6 +140,7 @@ const styles = StyleSheet.create({
   },
   accountQuestionText: {
     color: '#fff',
+    marginBottom: normalize(20),
   },
   signupLink: {
     color: '#FFBF00',
@@ -147,6 +151,9 @@ const styles = StyleSheet.create({
     fontSize: normalize(12),
     marginTop: normalize(5),
     marginLeft: normalize(20),
+  },
+  scrollViewContent: {
+    paddingBottom: 20,
   },
 });
 

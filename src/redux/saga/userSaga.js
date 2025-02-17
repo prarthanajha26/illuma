@@ -7,8 +7,6 @@ import {
 } from '../action/createUserActions';
 
 const createUserApi = async userData => {
-  console.log(userData, 'userData');
-
   const response = await fetch(
     'https://illuma-ai-gdcyh9andwarg9b8.canadacentral-01.azurewebsites.net/create_user',
     {
@@ -31,7 +29,6 @@ function* createUser(action) {
   try {
     const userData = action.payload;
     const result = yield call(createUserApi, userData);
-    console.log(result, 'result');
 
     if (result && result.success) {
       yield put(createUserSuccess(result.message));
@@ -44,7 +41,6 @@ function* createUser(action) {
   }
 }
 
-// Watcher saga
 function* userCreateSaga() {
   yield takeEvery(CREATE_USER, createUser);
 }

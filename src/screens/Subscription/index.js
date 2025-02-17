@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,50 +8,65 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
-import {icons, image} from '../../assets';
+import {fonts, icons, image} from '../../assets';
 import {normalize} from '../../utils/dimension';
 import {Accordion} from '../../components/Accordion';
 import {screenNames} from '../../navigator/screenName';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchSubscriptionRequest} from '../../redux/action/subscriptionAction';
+import {getUserDataRequest} from '../../redux/action/getUserdata';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
 
-const SubscriptionScreen = ({navigation, route}) => {
+const SubscriptionScreen = ({navigation}) => {
   // Subscription data
-  const subscription = {
-    basic: {
-      desc1: '50 tokens',
-      desc2: 'Access to all app features',
-      id: 'basic',
-      name: 'Basic package',
-      price: 4.9,
-      token_limit: {limit: '50', type: 'fixed'},
-    },
-    free: {
-      desc1: '50 tokens',
-      desc2: 'Access to all app features',
-      id: 'free',
-      name: 'Free package',
-      price: 0.0,
-      token_limit: {limit: '50', type: 'fixed'},
-    },
-    premium: {
-      desc1: 'Unlimited tokens',
-      desc2: 'Access to all app features',
-      id: 'premium',
-      name: 'Premium package',
-      price: 9.9,
-      token_limit: {limit: 'unlimited', type: 'fixed'},
-    },
+  const dispatch = useDispatch();
+  const {data, loading, error} = useSelector(state => state.subscription);
+  const {userData} = useSelector(state => state.getUserData);
+  const [profileData, setProfileData] = useState();
+
+  const getToken = async () => {
+    try {
+      const result = await AsyncStorage.getItem('token');
+      setProfileData(JSON.parse(result));
+    } catch (error) {
+      console.error('Error getting token:', error);
+    }
   };
 
-  const currentPlanIdFromRoute = route?.params?.currentPlanId || 'basic';
-  const currentPlan = subscription[currentPlanIdFromRoute];
+  useEffect(() => {
+    getToken();
+  }, []);
 
-  const availablePlans = Object.keys(subscription).filter(
-    key => key !== currentPlanIdFromRoute,
+  useFocusEffect(
+    React.useCallback(() => {
+      if (profileData?.data?.user?.email) {
+        dispatch(fetchSubscriptionRequest());
+        dispatch(getUserDataRequest(profileData?.data?.user?.email));
+      }
+    }, [profileData, dispatch]),
+  );
+
+  if (loading || !data || !userData) {
+    return (
+      <SafeAreaView style={styles.LoaderContainer}>
+        <ActivityIndicator size="large" color="#fff" />
+        <Text style={styles.loaderText}>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  const currentPlan = data?.data[userData?.data?.subscription?.id];
+
+  const availablePlans = Object.keys(data?.data).filter(
+    key => key !== userData?.data?.subscription?.id,
   );
 
   const renderPlan = ({item}) => {
-    const plan = subscription[item];
+    const plan = data?.data[item];
 
     return (
       <Accordion
@@ -114,7 +129,9 @@ const SubscriptionScreen = ({navigation, route}) => {
                 tintColor: 'white',
               }}
             />
-            <Text style={styles.featureText}>{plan.desc1}</Text>
+            <Text style={[styles.featureText, {color: '#fff'}]}>
+              {plan.desc1}
+            </Text>
           </View>
           <View style={styles.featureContainer}>
             <Image
@@ -126,19 +143,25 @@ const SubscriptionScreen = ({navigation, route}) => {
                 tintColor: 'white',
               }}
             />
-            <Text style={styles.featureText}>{plan.desc2}</Text>
+            <Text style={[styles.featureText, {color: '#fff'}]}>
+              {plan.desc2}
+            </Text>
           </View>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginVertical: normalize(15),
+              marginTop: normalize(50),
+              marginBottom: normalize(20),
             }}>
             <Text style={styles.price}>${plan.price}</Text>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate(screenNames.ManagePlan, {
                   subscription: true,
+                  plan: currentPlan,
+                  subscribeTo: plan,
+                  email: profileData?.data?.user?.email,
                 })
               }
               style={styles.subscribeButton}>
@@ -156,7 +179,16 @@ const SubscriptionScreen = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => {
+              dispatch(fetchSubscriptionRequest());
+              dispatch(getUserDataRequest(profileData?.data?.user?.email));
+            }}
+          />
+        }>
         <View style={{padding: normalize(20)}}>
           <Text style={styles.header}>Subscription Plans</Text>
 
@@ -218,6 +250,9 @@ const SubscriptionScreen = ({navigation, route}) => {
                 onPress={() =>
                   navigation.navigate(screenNames.ManagePlan, {
                     subscription: false,
+                    plan: currentPlan,
+                    subscriptionData: userData?.data?.subscription,
+                    email: profileData?.data?.user?.email,
                   })
                 }
                 style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -235,7 +270,7 @@ const SubscriptionScreen = ({navigation, route}) => {
           </View>
 
           {/* Active Plans */}
-          <Text style={styles.subHeader}>Active Plans</Text>
+          <Text style={styles.subHeader}>Available Plans</Text>
           <FlatList
             data={availablePlans}
             renderItem={renderPlan}
@@ -249,6 +284,16 @@ const SubscriptionScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  LoaderContainer: {
+    flex: 1,
+    backgroundColor: '#1c1c1c',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    color: '#fff',
+    marginTop: normalize(20),
+  },
   container: {
     flex: 1,
     backgroundColor: '#1c1c1c',
@@ -257,21 +302,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     color: '#fff',
-    fontSize: normalize(18),
+    fontSize: normalize(24),
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: normalize(16),
+
+    fontFamily: fonts.InstrumentSem,
   },
   currentPlanCard: {
     backgroundColor: '#FFC107',
     borderRadius: normalize(42),
     padding: normalize(29),
     marginBottom: normalize(24),
+    marginTop: normalize(20),
   },
   currentPlanHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: normalize(25),
   },
   currentPlanBadge: {
     borderWidth: 1,
@@ -284,47 +332,54 @@ const styles = StyleSheet.create({
     color: '#242424',
     fontSize: normalize(12),
     fontWeight: '400',
+    fontFamily: fonts.HammerRegular,
   },
   currentPlanTitle: {
     color: '#1c1c1c',
     fontSize: normalize(30),
     fontWeight: '600',
-    marginVertical: normalize(20),
+    marginTop: normalize(20),
+    marginBottom: normalize(10),
+    fontFamily: fonts.InterSemiBold,
   },
   featureText: {
-    color: '#fff',
+    color: '#000',
     fontSize: normalize(15),
     fontWeight: '400',
-    marginVertical: normalize(9),
+    marginVertical: normalize(5),
+    fontFamily: fonts.InstrumentReg,
   },
   currentPlanFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: normalize(30),
+    alignItems: 'baseline',
+    marginTop: normalize(50),
   },
   currentPlanPrice: {
     color: '#1c1c1c',
     fontSize: normalize(29),
     fontWeight: '400',
+    fontFamily: fonts.InterReg,
   },
   managePlanText: {
     color: '#1c1c1c',
     fontSize: normalize(14),
     fontWeight: '500',
+    fontFamily: fonts.InterReg,
   },
   subHeader: {
     color: '#fff',
     fontSize: normalize(16),
     fontWeight: 'bold',
     marginBottom: normalize(8),
+    fontFamily: fonts.InterSemiBold,
   },
   planList: {
     marginBottom: normalize(16),
   },
   planCard: {
     backgroundColor: '#2c2c2c',
-    borderRadius: normalize(16),
+    borderRadius: normalize(25),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -334,7 +389,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#242424',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: normalize(24),
+    borderRadius: normalize(18),
     height: normalize(60),
     width: normalize(60),
     marginRight: normalize(16),
@@ -359,6 +414,7 @@ const styles = StyleSheet.create({
   planDescription: {
     color: '#aaa',
     fontSize: normalize(14),
+    marginTop: normalize(5),
   },
   card: {
     backgroundColor: '#333333',
@@ -376,13 +432,14 @@ const styles = StyleSheet.create({
   featureContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: normalize(10),
+    marginBottom: normalize(5),
     gap: normalize(10),
   },
   price: {
     fontSize: normalize(28),
     fontWeight: 'bold',
     color: '#FFFFFF',
+    fontFamily: fonts.InterSemiBold,
   },
   subscribeButton: {
     borderColor: '#FFBF00',
@@ -398,6 +455,7 @@ const styles = StyleSheet.create({
     fontSize: normalize(12),
     fontWeight: '400',
     color: '#FFBF00',
+    fontFamily: fonts.HammerRegular,
   },
 });
 

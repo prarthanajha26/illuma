@@ -1,5 +1,4 @@
 const screenNames = {
-  HomeScreen: 'home',
   Home: 'home',
   Login: 'login',
   Splash: 'splash',
@@ -9,6 +8,12 @@ const screenNames = {
   Bookmark: 'bookmark',
   Analysis: 'analysis',
   ManagePlan: 'ManagePlan',
+  Notification: 'notification',
+  Profile: 'profile',
+  EditProfile: 'editProfile',
+  DeleteAccount: 'deleteAccount',
+  ChangePassword: 'changePassword',
+  ForgotPassword: 'forgotPassword',
 };
 
 export {screenNames};
