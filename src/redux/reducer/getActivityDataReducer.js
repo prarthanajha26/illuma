@@ -18,15 +18,16 @@ const getActivityData = (state = initialState, action) => {
     case GET_ACTIVITY_DATA_SUCCESS:
       const updatedData = state.activityData
         ? [
-            ...state.activityData.data,
             ...action.payload.data.filter(
               newItem =>
                 !state.activityData.data.some(
                   existingItem => existingItem.unique_id === newItem.unique_id,
                 ),
             ),
+            ...state.activityData.data,
           ]
         : action.payload.data;
+
       return {
         ...state,
         activeLoading: false,
