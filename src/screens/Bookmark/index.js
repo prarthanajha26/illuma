@@ -26,7 +26,6 @@ const BookmarkScreen = ({navigation}) => {
   const [page, setPage] = useState(1); // Add a state for tracking the page
   const {bookmarkData, loading} = useSelector(state => state.getBookmarData);
   const insets = useSafeAreaInsets();
-  const {userData} = useSelector(state => state.getUserData);
 
   const getToken = async () => {
     try {
@@ -45,7 +44,7 @@ const BookmarkScreen = ({navigation}) => {
     React.useCallback(() => {
       if (profileData?.data?.user?.email) {
         // Initially fetch data for page 1
-        dispatch(getBookmarkDataRequest(userData?.data?.email, page));
+        dispatch(getBookmarkDataRequest(profileData?.data?.user?.email, page));
       }
     }, [profileData, dispatch, page]),
   );
@@ -61,7 +60,11 @@ const BookmarkScreen = ({navigation}) => {
   const remainingData = bookmarkData?.data.slice(1);
 
   const renderItem = ({item}) => (
-    <BookmarkLogCard item={item} email={userData?.data?.email} cardNav={true} />
+    <BookmarkLogCard
+      item={item}
+      email={profileData?.data?.user?.email}
+      cardNav={true}
+    />
   );
 
   if (loading && !bookmarkData) {
@@ -87,8 +90,11 @@ const BookmarkScreen = ({navigation}) => {
         refreshControl={
           <RefreshControl
             refreshing={loading}
+            tintColor={'#fff'}
             onRefresh={() => {
-              dispatch(getBookmarkDataRequest(userData?.data?.email, page));
+              dispatch(
+                getBookmarkDataRequest(profileData?.data?.user?.email, page),
+              );
             }}
           />
         }>
@@ -118,7 +124,7 @@ const BookmarkScreen = ({navigation}) => {
           {firstItem && (
             <BookmarkLogCard
               item={firstItem}
-              email={userData?.data?.email}
+              email={profileData?.data?.user?.email}
               cardNav={true}
             />
           )}

@@ -19,6 +19,7 @@ import BookmarkLogCard from '../../components/BookmarkLogCard';
 // import {useFocusEffect} from '@react-navigation/native';
 import {screenNames} from '../../navigator/screenName';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Notification = ({navigation}) => {
   const {activityData, activeError, activeLoading} = useSelector(
@@ -29,7 +30,6 @@ const Notification = ({navigation}) => {
   const dispatch = useDispatch();
   const [profileData, setProfileData] = useState();
   const [page, setPage] = useState(1);
-  const {userData} = useSelector(state => state.getUserData);
 
   useEffect(() => {
     const getToken = async () => {
@@ -53,11 +53,13 @@ const Notification = ({navigation}) => {
   //   }, [profileData, dispatch, page]),
   // );
 
-  useEffect(() => {
-    if (userData?.data?.email) {
-      dispatch(getActivityDataRequest(userData?.data?.email, page));
-    }
-  }, [profileData, dispatch]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (profileData?.data?.user?.email) {
+        dispatch(getActivityDataRequest(profileData?.data?.user?.email, page));
+      }
+    }, [profileData, dispatch, page]),
+  );
 
   const firstItem = activityData?.data[0];
   const remainingData = activityData?.data.slice(1);
@@ -81,8 +83,11 @@ const Notification = ({navigation}) => {
         refreshControl={
           <RefreshControl
             refreshing={activeLoading}
+            tintColor={'#fff'}
             onRefresh={() => {
-              dispatch(getActivityDataRequest(userData?.data?.email, page));
+              dispatch(
+                getActivityDataRequest(profileData?.data?.user?.email, page),
+              );
             }}
           />
         }>
@@ -112,7 +117,7 @@ const Notification = ({navigation}) => {
           {firstItem && (
             <BookmarkLogCard
               item={firstItem}
-              email={userData?.data?.email}
+              email={profileData?.data?.user?.email}
               cardNav={true}
             />
           )}
@@ -123,7 +128,7 @@ const Notification = ({navigation}) => {
           numColumns={2}
           renderItem={({item}) => (
             <BookmarkLogCard
-              email={userData?.data?.email}
+              email={profileData?.data?.user?.email}
               item={item}
               cardNav={true}
             />

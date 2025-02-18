@@ -88,10 +88,6 @@ const Home = ({navigation, route}) => {
         email: profileData?.data?.user?.email,
       });
     }
-    console.log(
-      profileData?.data?.user?.email,
-      'profileData?.data?.user?.email',
-    );
     dispatch(getUserDataRequest(profileData?.data?.user?.email));
     dispatch({type: 'CLEAR_PROFILE_STATUS'});
   }, [data, loading, navigation]);
