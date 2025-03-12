@@ -213,10 +213,16 @@ const ProfileScreen = ({navigation}) => {
               <TouchableOpacity
                 style={styles.manageButton}
                 onPress={() =>
-                  navigation.navigate(screenNames.ManagePlan, {
-                    subscription: false,
-                    plan: currentPlan,
-                    subscriptionData: userData?.data?.subscription,
+                  navigation.navigate(screenNames.Subscription, {
+                    screen: screenNames.ManagePlan,
+                    params: {
+                      email: userData?.data?.email
+                        ? userData?.data?.email
+                        : profileData?.data?.user?.email,
+                      subscription: false,
+                      plan: currentPlan,
+                      subscriptionData: userData?.data?.subscription,
+                    },
                   })
                 }>
                 <Text style={styles.manageButtonText}>Manage plan →</Text>

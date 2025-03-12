@@ -1316,6 +1316,27 @@ PODS:
     - Yoga
   - react-native-safe-area-context (5.1.0):
     - React-Core
+  - react-native-webview (13.13.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - React-nativeconfig (0.75.2)
   - React-NativeModulesApple (0.75.2):
     - glog
@@ -1577,6 +1598,8 @@ PODS:
     - React-perflogger (= 0.75.2)
     - React-utils (= 0.75.2)
   - RecaptchaInterop (100.0.0)
+  - RNAppleAuthentication (2.4.0):
+    - React-Core
   - RNCAsyncStorage (2.1.0):
     - React-Core
   - RNFBApp (19.0.0):
@@ -1656,6 +1679,7 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1682,6 +1706,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
@@ -1782,6 +1807,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1834,6 +1861,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNAppleAuthentication:
+    :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFBApp:
@@ -1898,6 +1927,7 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: e8d0d98c5928b3993bc1f558acde32b70fd94cf4
   react-native-image-picker: f6c567fff4d306238ceed0c1f28e1c2c63992d3c
   react-native-safe-area-context: e134b241010ebe2aacdcea013565963d13826faa
+  react-native-webview: f5c35e0d850b42a67ae1e2f97377b3dca224d46a
   React-nativeconfig: 5fc2b05a590eb704128f5a4fc8ea6fa7b847e6e8
   React-NativeModulesApple: 8af212ff16af3ecbfc4847dc24c408686f253135
   React-perflogger: 8a360ccf603de6ddbe9ff8f54383146d26e6c936
@@ -1925,6 +1955,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 81b80bf3fcf9fe55b614b1f1a3d8d27ffe411c84
   ReactCommon: 860a0ad92824ca3782e0345b7f48cfb7816eabc5
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  RNAppleAuthentication: 8d313d93fe2238d6b7ff0a39c67ebcf298d96653
   RNCAsyncStorage: c91d753ede6dc21862c4922cd13f98f7cfde578e
   RNFBApp: 7a7ecc16d34ce2cfc9628f312c41fc2601645be4
   RNFBAuth: c85f09850c9dff2e283106aeee9349a7790cfa5f

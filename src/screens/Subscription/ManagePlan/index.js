@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -14,10 +14,15 @@ import {normalize} from '../../../utils/dimension';
 import ProgressBar from '../../../components/ProgressBar';
 import {fetchPaymentUrl} from '../../../redux/saga/paymentSaga';
 import {screenNames} from '../../../navigator/screenName';
+import WebView from 'react-native-webview'; // Import WebView
 
 const ManagePlanScreen = ({navigation, route}) => {
   const {subscription, plan, subscriptionData, subscribeTo, email} =
     route?.params || {};
+
+  const [checkoutUrl, setCheckoutUrl] = useState(null); // Store the checkout URL
+  const [showWebView, setShowWebView] = useState(false); // State to show WebView
+  const [paymentStatus, setPaymentStatus] = useState(null);
 
   let formattedDate = '';
   if (subscriptionData !== undefined && subscriptionData?.end_date) {
@@ -39,13 +44,49 @@ const ManagePlanScreen = ({navigation, route}) => {
       navigation.navigate(screenNames.Subscription);
     } else {
       const data = await fetchPaymentUrl(email, subscribeTo?.id);
-      Linking.openURL(data.checkout_url);
+      setCheckoutUrl(data.checkout_url);
+      setShowWebView(true);
     }
   };
+
   const handleRenewPlan = async () => {
     const data = await fetchPaymentUrl(email, plan.id);
-    Linking.openURL(data.checkout_url);
+    setCheckoutUrl(data.checkout_url);
+    setShowWebView(true);
   };
+
+  if (showWebView && checkoutUrl) {
+    const injectedJavaScript = `
+    setTimeout(() => {
+      const element = document.querySelector("h1.text-2xl.font-semibold.text-gray-800.mt-4");
+      if (element) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ payment: element.innerText.trim() }));
+      }
+    }, 1000);
+  `;
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <WebView
+          source={{uri: checkoutUrl}}
+          startInLoadingState={true}
+          style={{flex: 1}}
+          injectedJavaScript={injectedJavaScript}
+          onMessage={event => {
+            const data = JSON.parse(event.nativeEvent.data);
+            if (data.payment === 'Payment Successful!') {
+              navigation.navigate(screenNames.Subscription);
+            } else {
+              setCheckoutUrl(''); // Update the checkout URL
+              setShowWebView(false);
+            }
+            console.log('Extracted Data:', data);
+            setPaymentStatus(data);
+          }}
+        />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

@@ -10,6 +10,7 @@ import BottomNavigation from './bottomNavigation';
 import Analysis from '../screens/Home/Analysis';
 import ManagePlanScreen from '../screens/Subscription/ManagePlan';
 import RecoverAccount from '../screens/forgotPassword';
+import SubscriptionScreen from '../screens/Subscription';
 const Stack = createNativeStackNavigator();
 
 const rootnavigation = () => {
@@ -49,6 +50,11 @@ const rootnavigation = () => {
         <Stack.Screen
           name={screenNames.ManagePlan}
           component={ManagePlanScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={screenNames.Subscription}
+          component={SubscriptionScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

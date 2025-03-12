@@ -81,7 +81,7 @@ export default function EditProfile({navigation, route}) {
   };
 
   const validatePhone = phone => {
-    const phonePattern = /^\+?[1-9]\d{1,14}$/;
+    const phonePattern = /^\+?[1-9]\d{0,2}[-.\s]?\d{7,15}$/;
     return phonePattern.test(phone);
   };
 
@@ -188,7 +188,7 @@ export default function EditProfile({navigation, route}) {
               value={phone}
               onChangeText={setPhone}
               keyboardType="phone-pad"
-              maxLength={10}
+              maxLength={20}
             />
             {phoneError ? (
               <Text style={styles.errorText}>{phoneError}</Text>

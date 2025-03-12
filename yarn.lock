@@ -1595,6 +1595,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@invertase/react-native-apple-authentication@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@invertase/react-native-apple-authentication@npm:2.4.0"
+  checksum: 105dde0a27224e7f2a64d7e0a00465d43869b787359efe8672d60dc81d932189b400faf68d4ce18a57317edaa3b187224c7a2fa196e82480a55eb82feea50e7f
+  languageName: node
+  linkType: hard
+
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -3090,6 +3097,7 @@ __metadata:
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
+    "@invertase/react-native-apple-authentication": ^2.4.0
     "@react-native-async-storage/async-storage": ^2.1.0
     "@react-native-firebase/app": 19.0.0
     "@react-native-firebase/auth": 19.0.0
@@ -3113,6 +3121,7 @@ __metadata:
     react-native-image-picker: ^7.2.3
     react-native-safe-area-context: ^5.0.0
     react-native-screens: ^4.4.0
+    react-native-webview: ^13.13.2
     react-redux: ^9.2.0
     react-test-renderer: 18.3.1
     redux: ^5.0.1
@@ -5678,7 +5687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:^2.2.4":
+"invariant@npm:2.2.4, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -8303,6 +8312,19 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 866dbc4803980ce589a212c1a8b15f8cdf428f39895b00edfcc9aaf5f658c8fce0ddf37e7f8d259e4f7385909485c0720209ca6fc5f8ebd8531a7b2ec07fc658
+  languageName: node
+  linkType: hard
+
+"react-native-webview@npm:^13.13.2":
+  version: 13.13.2
+  resolution: "react-native-webview@npm:13.13.2"
+  dependencies:
+    escape-string-regexp: ^4.0.0
+    invariant: 2.2.4
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 034b1ac22b32f3c9c66c1be96ec71078657b569ddd0970639a90ddf2f3849fa31bc010cff19e5b9b315ce836b9061926b196a156a72b9438f5cee24512ebc33a
   languageName: node
   linkType: hard
 
