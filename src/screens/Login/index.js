@@ -23,7 +23,7 @@ import {Alert} from 'react-native';
 import styles from './style';
 import {updateProfileRequest} from '../../redux/action/updateProfileAction';
 import {getUserDataRequest} from '../../redux/action/getUserdata';
-import {normalize} from '../../utils/dimension';
+import {isIOS, normalize} from '../../utils/dimension';
 
 const Login = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
@@ -253,7 +253,9 @@ const Login = ({navigation, route}) => {
       <ScrollView
         automaticallyAdjustKeyboardInsets={true}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollViewContent}>
+        contentContainerStyle={{
+          flex: 1,
+        }}>
         <View style={styles.centered}>
           <View style={styles.logoContainer}>
             <Image
@@ -272,92 +274,104 @@ const Login = ({navigation, route}) => {
             <Text style={styles.signupDescription}>
               Enter your personal detail to log into your account
             </Text>
-            <View style={styles.googleButtonContainer}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.googleButton}
-                onPress={onGoogleButtonPress}>
-                <Image source={icons.googleIcon} style={styles.googleIcon} />
-                <Text style={{color: '#fff', fontFamily: fonts.InstrumentReg}}>
-                  Continue with Google
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.orContainer}>
-            <View style={styles.orDivider} />
-            <Text style={styles.orText}>or</Text>
-            <View style={styles.orDivider} />
-          </View>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.input, errors.username && {borderColor: 'red'}]}
-            placeholder="Email Address"
-            placeholderTextColor="#AAA8A8"
-            value={username}
-            onChangeText={text => handleInputChange('username', text)}
-          />
-          {errors.username && (
-            <Text style={styles.errorText}>{errors.username}</Text>
-          )}
-          <View style={styles.passwordInputContainer}>
-            <TextInput
-              style={[styles.input, errors.password && {borderColor: 'red'}]}
-              placeholder="Enter Your Password"
-              placeholderTextColor="#AAA8A8"
-              value={password}
-              secureTextEntry={!isPasswordVisible}
-              onChangeText={text => handleInputChange('password', text)}
-            />
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.eyeIconContainer}
-              onPress={togglePasswordVisibility}>
-              <Image
-                source={isPasswordVisible ? icons.eyeIconOpen : icons.eyeIcon}
-                style={styles.eyeIcon}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.forgotPasswordButton}
-              onPress={() => navigation.navigate(screenNames.ForgotPassword)}>
-              <Text style={styles.forgotPasswordText}>Forgot Password</Text>
-            </TouchableOpacity>
-          </View>
-          {errors.password && (
-            <Text style={styles.errorText}>{errors.password}</Text>
-          )}
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={[styles.signupButton, {opacity: isSubmitDisabled ? 0.5 : 1}]}
-            disabled={isSubmitDisabled}
-            onPress={handleSubmit}>
-            {loading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <View style={{flexDirection: 'row', gap: normalize(10)}}>
-                <Text style={styles.signupButtonText}>Sign In</Text>
-                <Image
-                  source={icons.arrow}
-                  style={{
-                    height: normalize(20),
-                    width: normalize(20),
-                    tintColor: '#000',
-                  }}
-                />
+            {!isIOS && (
+              <View style={styles.googleButtonContainer}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.googleButton}
+                  onPress={onGoogleButtonPress}>
+                  <Image source={icons.googleIcon} style={styles.googleIcon} />
+                  <Text
+                    style={{color: '#fff', fontFamily: fonts.InstrumentReg}}>
+                    Continue with Google
+                  </Text>
+                </TouchableOpacity>
               </View>
             )}
-          </TouchableOpacity>
+          </View>
+          {!isIOS && (
+            <View style={styles.orContainer}>
+              <View style={styles.orDivider} />
+              <Text style={styles.orText}>or</Text>
+              <View style={styles.orDivider} />
+            </View>
+          )}
         </View>
-        <View style={styles.accountQuestionContainer}>
-          <Text style={styles.accountQuestionText}>Don't have an account?</Text>
-          <Text
-            onPress={() => navigation.navigate(screenNames.Register)}
-            style={styles.signupLink}>
-            Sign up
-          </Text>
+        <View style={isIOS && styles.mainContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[styles.input, errors.username && {borderColor: 'red'}]}
+              placeholder="Email Address"
+              placeholderTextColor="#AAA8A8"
+              value={username}
+              onChangeText={text => handleInputChange('username', text)}
+            />
+            {errors.username && (
+              <Text style={styles.errorText}>{errors.username}</Text>
+            )}
+            <View style={styles.passwordInputContainer}>
+              <TextInput
+                style={[styles.input, errors.password && {borderColor: 'red'}]}
+                placeholder="Enter Your Password"
+                placeholderTextColor="#AAA8A8"
+                value={password}
+                secureTextEntry={!isPasswordVisible}
+                onChangeText={text => handleInputChange('password', text)}
+              />
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.eyeIconContainer}
+                onPress={togglePasswordVisibility}>
+                <Image
+                  source={isPasswordVisible ? icons.eyeIconOpen : icons.eyeIcon}
+                  style={styles.eyeIcon}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.forgotPasswordButton}
+                onPress={() => navigation.navigate(screenNames.ForgotPassword)}>
+                <Text style={styles.forgotPasswordText}>Forgot Password</Text>
+              </TouchableOpacity>
+            </View>
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={[
+                styles.signupButton,
+                {opacity: isSubmitDisabled ? 0.5 : 1},
+              ]}
+              disabled={isSubmitDisabled}
+              onPress={handleSubmit}>
+              {loading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <View style={{flexDirection: 'row', gap: normalize(10)}}>
+                  <Text style={styles.signupButtonText}>Sign In</Text>
+                  <Image
+                    source={icons.arrow}
+                    style={{
+                      height: normalize(20),
+                      width: normalize(20),
+                      tintColor: '#000',
+                    }}
+                  />
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.accountQuestionContainer}>
+            <Text style={styles.accountQuestionText}>
+              Don't have an account?
+            </Text>
+            <Text
+              onPress={() => navigation.navigate(screenNames.Register)}
+              style={styles.signupLink}>
+              Sign up
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

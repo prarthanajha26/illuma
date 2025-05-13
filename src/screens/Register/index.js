@@ -24,7 +24,7 @@ import {createUser} from '../../redux/action/createUserActions';
 import {updateProfileRequest} from '../../redux/action/updateProfileAction';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {getUserDataRequest} from '../../redux/action/getUserdata';
-import {normalize} from '../../utils/dimension';
+import {isIOS, normalize} from '../../utils/dimension';
 
 const Register = ({navigation}) => {
   const insets = useSafeAreaInsets();
@@ -228,117 +228,124 @@ const Register = ({navigation}) => {
             <Text style={styles.signupDescription}>
               Enter your personal details to create an account
             </Text>
-            <View style={styles.googleButtonContainer}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.googleButton}
-                onPress={onGoogleButtonPress}>
-                <Image source={icons.googleIcon} style={styles.googleIcon} />
-                <Text style={{color: '#fff', fontFamily: fonts.InstrumentReg}}>
-                  Continue with Google
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.orContainer}>
-            <View style={styles.orDivider} />
-            <Text style={styles.orText}>or</Text>
-            <View style={styles.orDivider} />
-          </View>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            placeholderTextColor={'#AAA8A8'}
-            value={username}
-            onChangeText={text => {
-              setUsername(text);
-              if (showErrors) setUsernameError('');
-            }}
-          />
-          {showErrors && usernameError ? (
-            <Text style={styles.errorText}>{usernameError}</Text>
-          ) : null}
-
-          <TextInput
-            style={styles.emailinput}
-            placeholder="Email Address"
-            placeholderTextColor={'#AAA8A8'}
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-              if (showErrors) setEmailError('');
-            }}
-          />
-          {showErrors && emailError ? (
-            <Text style={styles.errorText}>{emailError}</Text>
-          ) : null}
-
-          <View style={styles.passwordInputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Your Password"
-              placeholderTextColor={'#AAA8A8'}
-              secureTextEntry={!isPasswordVisible}
-              value={password}
-              onChangeText={text => {
-                setPassword(text);
-                if (showErrors) setPasswordError('');
-              }}
-            />
-
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={togglePassword}
-              style={styles.eyeIconContainer}>
-              <Image
-                source={isPasswordVisible ? icons.eyeIcon : icons.eyeIcon}
-                style={styles.eyeIcon}
-              />
-            </TouchableOpacity>
-          </View>
-          {showErrors && passwordError ? (
-            <Text style={styles.errorText}>{passwordError}</Text>
-          ) : null}
-
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={[
-              styles.signupButton,
-              {backgroundColor: isSignupEnabled ? '#FFBF00' : '#FFBF004D'},
-            ]}
-            onPress={handleSignup}
-            disabled={!isSignupEnabled}>
-            {loading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <View style={{flexDirection: 'row', gap: normalize(10)}}>
-                <Text style={styles.signupButtonText}>Sign Up</Text>
-                <Image
-                  source={icons.arrow}
-                  style={{
-                    height: normalize(20),
-                    width: normalize(20),
-                    tintColor: '#000',
-                  }}
-                />
+            {!isIOS && (
+              <View style={styles.googleButtonContainer}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.googleButton}
+                  onPress={onGoogleButtonPress}>
+                  <Image source={icons.googleIcon} style={styles.googleIcon} />
+                  <Text
+                    style={{color: '#fff', fontFamily: fonts.InstrumentReg}}>
+                    Continue with Google
+                  </Text>
+                </TouchableOpacity>
               </View>
             )}
-          </TouchableOpacity>
+          </View>
+          {!isIOS && (
+            <View style={styles.orContainer}>
+              <View style={styles.orDivider} />
+              <Text style={styles.orText}>or</Text>
+              <View style={styles.orDivider} />
+            </View>
+          )}
         </View>
-        <View style={styles.accountQuestionContainer}>
-          <Text style={styles.accountQuestionText}>
-            Already have an account?
-          </Text>
-          <Text
-            onPress={() => {
-              Keyboard.dismiss();
-              navigation.navigate(screenNames.Login);
-            }}
-            style={styles.signupLink}>
-            Login
-          </Text>
+        <View style={styles.mainContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Full Name"
+              placeholderTextColor={'#AAA8A8'}
+              value={username}
+              onChangeText={text => {
+                setUsername(text);
+                if (showErrors) setUsernameError('');
+              }}
+            />
+            {showErrors && usernameError ? (
+              <Text style={styles.errorText}>{usernameError}</Text>
+            ) : null}
+
+            <TextInput
+              style={styles.emailinput}
+              placeholder="Email Address"
+              placeholderTextColor={'#AAA8A8'}
+              value={email}
+              onChangeText={text => {
+                setEmail(text);
+                if (showErrors) setEmailError('');
+              }}
+            />
+            {showErrors && emailError ? (
+              <Text style={styles.errorText}>{emailError}</Text>
+            ) : null}
+
+            <View style={styles.passwordInputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Your Password"
+                placeholderTextColor={'#AAA8A8'}
+                secureTextEntry={!isPasswordVisible}
+                value={password}
+                onChangeText={text => {
+                  setPassword(text);
+                  if (showErrors) setPasswordError('');
+                }}
+              />
+
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={togglePassword}
+                style={styles.eyeIconContainer}>
+                <Image
+                  source={isPasswordVisible ? icons.eyeIcon : icons.eyeIcon}
+                  style={styles.eyeIcon}
+                />
+              </TouchableOpacity>
+            </View>
+            {showErrors && passwordError ? (
+              <Text style={styles.errorText}>{passwordError}</Text>
+            ) : null}
+
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={[
+                styles.signupButton,
+                {backgroundColor: isSignupEnabled ? '#FFBF00' : '#FFBF004D'},
+              ]}
+              onPress={handleSignup}
+              disabled={!isSignupEnabled}>
+              {loading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <View style={{flexDirection: 'row', gap: normalize(10)}}>
+                  <Text style={styles.signupButtonText}>Sign Up</Text>
+                  <Image
+                    source={icons.arrow}
+                    style={{
+                      height: normalize(20),
+                      width: normalize(20),
+                      tintColor: '#000',
+                    }}
+                  />
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.accountQuestionContainer}>
+            <Text style={styles.accountQuestionText}>
+              Already have an account?
+            </Text>
+            <Text
+              onPress={() => {
+                Keyboard.dismiss();
+                navigation.navigate(screenNames.Login);
+              }}
+              style={styles.signupLink}>
+              Login
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

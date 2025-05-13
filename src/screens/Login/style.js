@@ -156,9 +156,7 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(20),
     marginTop: 5,
   },
-  // scrollViewContent: {
-  //   // flexGrow: 1,
-  // },
+  mainContainer: {flex: 0.8, justifyContent: 'center'},
 });
 
 export default styles;

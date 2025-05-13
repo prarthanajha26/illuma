@@ -46,11 +46,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera to take photos.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Illuma AI will access your device's camera to help you take a photo to use for your profile so other users can identify you when they look you up or interact with you on the app.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Illuma AI uses your photo library to help you select profile photo so other users can identify you when they look up you up or interact with you on the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow access to the photo library for selecting images</string>
+	<string>Illuma AI uses your photo library to help you select profile photo so other users can identify you when they look up you up or interact with you on the app.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>HammersmithOne-Regular.ttf</string>

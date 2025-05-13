@@ -3118,7 +3118,9 @@ __metadata:
     react: 18.3.1
     react-native: 0.75.2
     react-native-fs: ^2.20.0
+    react-native-iap: ^12.16.2
     react-native-image-picker: ^7.2.3
+    react-native-permissions: ^5.3.0
     react-native-safe-area-context: ^5.0.0
     react-native-screens: ^4.4.0
     react-native-webview: ^13.13.2
@@ -8282,6 +8284,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-iap@npm:^12.16.2":
+  version: 12.16.2
+  resolution: "react-native-iap@npm:12.16.2"
+  peerDependencies:
+    expo: ">=47.0.0"
+    react: ">=16.13.1"
+    react-native: ">=0.65.1"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 8d107815f3e352da9bed3aabed8fee519864b25393bfc63c5c6a6ff9ab0d7e0fd187484218279a57f579ebae977072c9674cec322cfba2e46935e14a7cae84d9
+  languageName: node
+  linkType: hard
+
 "react-native-image-picker@npm:^7.2.3":
   version: 7.2.3
   resolution: "react-native-image-picker@npm:7.2.3"
@@ -8289,6 +8305,20 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 96d67516e8e1c1768c593ca1b0a507d5212d8ac5df2610ad9d6f38c188b8d0720966559867849f74b6c19d2500664ce17c907e5fa37ab72487abd363cf493e7d
+  languageName: node
+  linkType: hard
+
+"react-native-permissions@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "react-native-permissions@npm:5.3.0"
+  peerDependencies:
+    react: ">=18.1.0"
+    react-native: ">=0.70.0"
+    react-native-windows: ">=0.70.0"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 0896ed6919062a57b79c54d3de0d14a515ada9be87b5f65295e728ee23706430d99d45e48b8d45caad2d8f5eb42d1bd53cb213ff645ebec2117c94aadd35bfe8
   languageName: node
   linkType: hard
 

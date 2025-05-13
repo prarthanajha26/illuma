@@ -61,9 +61,21 @@ const SubscriptionScreen = ({navigation}) => {
 
   const currentPlan = data?.data[userData?.data?.subscription?.id];
 
-  const availablePlans = Object.keys(data?.data).filter(
-    key => key !== userData?.data?.subscription?.id,
-  );
+  const currentPlanId = userData?.data?.subscription?.id;
+
+  const availablePlans = Object.keys(data?.data).filter(key => {
+    if (
+      (currentPlanId === 'premium' || currentPlanId === 'basic') &&
+      key === 'free'
+    ) {
+      return false;
+    }
+    return key !== currentPlanId;
+  });
+
+  const handleRestore = () => {
+    // SKPaymentQueue.default().restoreCompletedTransactions();
+  };
 
   const renderPlan = ({item}) => {
     const plan = data?.data[item];
@@ -278,6 +290,9 @@ const SubscriptionScreen = ({navigation}) => {
             style={styles.planList}
           />
         </View>
+        {/* <TouchableOpacity onPress={handleRestore}>
+          <Text style={{color: 'white'}}>Restore Button</Text>
+        </TouchableOpacity> */}
       </ScrollView>
     </SafeAreaView>
   );

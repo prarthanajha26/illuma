@@ -10,6 +10,7 @@ import getActivitySaga from './getActivityDataSaga';
 import {watchUpdateNewsletter, watchUpdateNotification} from './editSaga';
 import watchUpdateProfile from './updateProfileSaga';
 import {watchDeleteUserSaga} from './deleteUserSaga';
+import watchUpdateSubscription from './updateSubsSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -24,5 +25,6 @@ export default function* rootSaga() {
     fork(watchUpdateNotification),
     fork(watchUpdateProfile),
     fork(watchDeleteUserSaga),
+    fork(watchUpdateSubscription),
   ]);
 }

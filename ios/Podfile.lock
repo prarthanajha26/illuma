@@ -1614,6 +1614,10 @@ PODS:
   - RNGoogleSignin (13.1.0):
     - GoogleSignIn (~> 7.1)
     - React-Core
+  - RNIap (12.16.2):
+    - React-Core
+  - RNPermissions (5.3.0):
+    - React-Core
   - RNScreens (4.5.0):
     - DoubleConversion
     - glog
@@ -1712,6 +1716,8 @@ DEPENDENCIES:
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNIap (from `../node_modules/react-native-iap`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1873,6 +1879,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -1961,10 +1971,12 @@ SPEC CHECKSUMS:
   RNFBAuth: c85f09850c9dff2e283106aeee9349a7790cfa5f
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGoogleSignin: ba93c1137f8d5cebdd39b04f493fd212ddf5ecd6
+  RNIap: f94647b3a3dbd5fa08ad7ed847eb588aa5fe95fe
+  RNPermissions: 55d53ae472541deb9177d48ea4ae8695b2f6af5b
   RNScreens: adea7e5059df296816014c8a5b2ea0be07c21b51
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 36d44f1d31d7c11be1067e5c7a70a12c2eed355c
 
-PODFILE CHECKSUM: 27a01caa98f978fca8d9ee9b9303ee6cb2809d36
+PODFILE CHECKSUM: 3674abc22cd4e9578573b1ddb95443f250f6c2df
 
 COCOAPODS: 1.16.2

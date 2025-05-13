@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   Image,
   Modal,
-  RefreshControl,
   SafeAreaView,
   ScrollView,
   Text,
@@ -21,6 +20,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import styles from './styles';
 import {normalize} from '../../utils/dimension';
 import {getUserDataRequest} from '../../redux/action/getUserdata';
+import permissionComponent from '../../utils/permission';
 
 const Home = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -111,15 +111,20 @@ const Home = ({navigation, route}) => {
     };
 
     launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('Image picker error: ', response?.error);
-      } else {
-        let imageUri = response?.uri || response.assets?.[0]?.uri;
-        setBase64(response?.assets[0]?.base64);
-        setSelectedImage(imageUri);
-      }
+      permissionComponent.Gallery(async status => {
+        if (status) {
+          if (response.didCancel) {
+            console.log('User cancelled image picker');
+          } else if (response.error) {
+            console.log('Image picker error: ', response?.error);
+          } else {
+            let imageUri = response?.uri || response.assets?.[0]?.uri;
+            setBase64(response?.assets[0]?.base64);
+            setSelectedImage(imageUri);
+          }
+        } else {
+        }
+      });
     });
   };
 
@@ -135,22 +140,45 @@ const Home = ({navigation, route}) => {
       };
 
       launchCamera(options, response => {
-        if (response.didCancel) {
-          console.log('User cancelled camera');
-        } else if (response.error) {
-          console.log('Camera Error: ', response.error);
-        } else {
-          const imageUri =
-            response.uri || (response.assets && response.assets[0]?.uri);
-          const base64Image = response.assets?.[0]?.base64;
+        permissionComponent.Camera(async status => {
+          if (status) {
+            if (response.didCancel) {
+              console.log('User cancelled camera');
+            } else if (response.error) {
+              console.log('Camera Error: ', response.error);
+            } else {
+              const imageUri =
+                response.uri || (response.assets && response.assets[0]?.uri);
+              const base64Image = response.assets?.[0]?.base64;
 
-          if (imageUri) {
-            setSelectedImage(imageUri);
+              if (imageUri) {
+                setSelectedImage(imageUri);
+              }
+              if (base64Image) {
+                setBase64(base64Image);
+              }
+            }
+          } else {
+            Alert.alert(
+              'Access Denied Camera',
+              'Go to Settings to allow access to the camera.',
+              [
+                {
+                  text: 'Cancel',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Go to Settings',
+                  onPress: () => {
+                    Linking.openSettings()
+                      .then(() => {})
+                      .catch(() => {});
+                  },
+                },
+              ],
+            );
           }
-          if (base64Image) {
-            setBase64(base64Image);
-          }
-        }
+        });
       });
     }
   };

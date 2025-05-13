@@ -153,8 +153,10 @@ const styles = StyleSheet.create({
     marginLeft: normalize(20),
   },
   scrollViewContent: {
+    flex: 1,
     paddingBottom: 20,
   },
+  mainContainer: {flex: 0.9, justifyContent: 'center'},
 });
 
 export default styles;

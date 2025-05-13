@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,14 +7,21 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
-  Linking,
 } from 'react-native';
 import {fonts, icons, image} from '../../../assets';
-import {normalize} from '../../../utils/dimension';
+import {isIOS, normalize} from '../../../utils/dimension';
 import ProgressBar from '../../../components/ProgressBar';
 import {fetchPaymentUrl} from '../../../redux/saga/paymentSaga';
 import {screenNames} from '../../../navigator/screenName';
-import WebView from 'react-native-webview'; // Import WebView
+import WebView from 'react-native-webview';
+import {initConnection} from 'react-native-iap';
+import {
+  fetchProducts,
+  initIAPConnection,
+  purchaseProduct,
+} from '../../../services/iapService';
+import {useDispatch} from 'react-redux';
+import {updateSubscriptionReq} from '../../../redux/action/updateSubscription';
 
 const ManagePlanScreen = ({navigation, route}) => {
   const {subscription, plan, subscriptionData, subscribeTo, email} =
@@ -23,6 +30,7 @@ const ManagePlanScreen = ({navigation, route}) => {
   const [checkoutUrl, setCheckoutUrl] = useState(null); // Store the checkout URL
   const [showWebView, setShowWebView] = useState(false); // State to show WebView
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const dispatch = useDispatch();
 
   let formattedDate = '';
   if (subscriptionData !== undefined && subscriptionData?.end_date) {
@@ -39,20 +47,60 @@ const ManagePlanScreen = ({navigation, route}) => {
       .toLowerCase();
   }
 
+  const initilizeConnection = async () => {
+    const result = await initIAPConnection();
+    if (result) {
+      const result = await fetchProducts();
+    }
+  };
+  useEffect(() => {
+    initilizeConnection();
+  }, []);
+  const handlePaymentForIos = async productName => {
+    try {
+      await initConnection();
+      if (productName === 'premium') {
+        const result = await purchaseProduct('com.IllumaPremium');
+        if (result) {
+          dispatch(
+            updateSubscriptionReq({email: email, subscription_id: productName}),
+          );
+        }
+      } else {
+        const result = await purchaseProduct('com.illumaBasics');
+        if (result) {
+          dispatch(
+            updateSubscriptionReq({email: email, subscription_id: productName}),
+          );
+        }
+      }
+    } catch (error) {
+      console.log('Error fetching products:', error);
+    }
+  };
+
   const handlePayment = async () => {
     if (!subscription) {
       navigation.navigate(screenNames.Subscription);
     } else {
-      const data = await fetchPaymentUrl(email, subscribeTo?.id);
-      setCheckoutUrl(data.checkout_url);
-      setShowWebView(true);
+      if (isIOS) {
+        handlePaymentForIos(subscribeTo?.id);
+      } else {
+        const data = await fetchPaymentUrl(email, subscribeTo?.id);
+        setCheckoutUrl(data.checkout_url);
+        setShowWebView(true);
+      }
     }
   };
 
   const handleRenewPlan = async () => {
-    const data = await fetchPaymentUrl(email, plan.id);
-    setCheckoutUrl(data.checkout_url);
-    setShowWebView(true);
+    if (isIOS) {
+      handlePaymentForIos(plan.id);
+    } else {
+      const data = await fetchPaymentUrl(email, plan.id);
+      setCheckoutUrl(data.checkout_url);
+      setShowWebView(true);
+    }
   };
 
   if (showWebView && checkoutUrl) {
